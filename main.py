@@ -27,7 +27,7 @@ def main():
 
 if __name__ == "__main__":
     try:
-        with open(cfg.SEAR_PARAMS_FILE) as file:
+        with open(cfg.SEARCH_PARAMS_FILE) as file:
             search_params = json.load(file)
     except IOError as error:
         logger.warning(msg.READ_SEARCH_PARAMS_ERROR.format(error))
