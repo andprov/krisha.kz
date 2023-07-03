@@ -77,7 +77,7 @@ crontab -e
 Внести запись с настройкой запуска:
 ```
 # Ежедневный запуск в 12 часов.
-* 12 * * * /home/< user-name >/< dir-name >/krisha.kz/cron.sh
+0 12 * * * /home/< user-name >/< dir-name >/krisha.kz/cron.sh
 ```
 
 # <a id="params">Параметры поиска</a>
