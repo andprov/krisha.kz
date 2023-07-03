@@ -1,0 +1,6 @@
+class RequestErrorsMaximum(Exception):
+    ...
+
+
+class MissedAdMaximum(Exception):
+    ...
