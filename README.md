@@ -58,7 +58,7 @@ pip install -r requirements.txt
 
 Запустить скрипт:
 ```
-python3 main.py
+python main.py
 ```
 
 # Настройка запуска по расписанию
