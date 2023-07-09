@@ -59,10 +59,10 @@ class Flat:
             raise ValueError(msg.CR_SOUP_FIND_ERROR.format("jsdata"))
         string = script.text.strip()
         start_index = string.find("{")
-        end_ndex = string.rfind("}")
-        if start_index == -1 or end_ndex == -1:
+        end_index = string.rfind("}")
+        if start_index == -1 or end_index == -1:
             raise ValueError(msg.CR_JS_PARS_ERROR)
-        json_string = string[start_index:end_ndex + 1]
+        json_string = string[start_index:end_index + 1]
         try:
             data = json.loads(json_string)
             return data
