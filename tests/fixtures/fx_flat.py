@@ -1,5 +1,3 @@
-# Flat
-
 valid_script = """
 <script id="jsdata">
 var data =
