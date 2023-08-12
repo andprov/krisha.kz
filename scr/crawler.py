@@ -9,10 +9,10 @@ from tqdm import trange
 from tqdm.contrib.logging import logging_redirect_tqdm
 
 import scr.config as cfg
-import scr.misc.exceptions as ex
 import scr.misc.msg as msg
 from db.queries import insert_flats_data_db
 from scr.flat import Flat
+from scr.misc.exceptions import MissedAdMaximum, RequestErrorsMaximum
 
 logger = logging.getLogger()
 
@@ -33,7 +33,7 @@ def get_response(url):
 
             sleep(delay)
 
-    raise ex.RequestErrorsMaximum(msg.REQUEST_ERRORS_MAXIMUM)
+    raise RequestErrorsMaximum(msg.REQUEST_ERRORS_MAXIMUM)
 
 
 def get_content(response):
@@ -92,10 +92,10 @@ def get_flats_data_on_page(ads_urls):
     for url in ads_urls:
         try:
             response = get_response(url)
-        except ex.RequestErrorsMaximum:
+        except RequestErrorsMaximum:
             missed_ad_counter += 1
             if missed_ad_counter > cfg.MAX_SKIP_AD:
-                raise ex.MissedAdMaximum(msg.CR_MISSED_MAXIMUM)
+                raise MissedAdMaximum(msg.CR_MISSED_MAXIMUM)
             logger.warning(msg.CR_SKIP_AD)
         else:
             content = get_content(response)
