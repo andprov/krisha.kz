@@ -48,9 +48,9 @@ CR_KEY_DATA_ERROR = (
 )
 CR_KEY_GET_ERROR = "Crawler - Key < {} > in JS not found"
 CR_NON_VALID_FLATS_DATA = (
-    "Crawler - Flats_data list does not contain instances of FlatData "
+    "Crawler - Flats_data list does not contain instances of Flat "
     "class. "
-    "Please check methods of FlatData class responsible for searching data "
+    "Please check methods of Flat class responsible for searching data "
     "on Ad page"
 )
 CR_CITY_VALIDATE = (
