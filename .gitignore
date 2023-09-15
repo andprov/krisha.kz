@@ -4,4 +4,3 @@ __pycache__/
 .vscode/
 db.sqlite
 *.log
-_cron.sh
