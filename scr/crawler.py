@@ -111,13 +111,6 @@ def get_flats_data_on_page(ads_urls: list[str]) -> list[Flat]:
     return flats_data
 
 
-def validate_flats_data(flats_data: list[Flat]) -> list[Flat]:
-    validated_data: list[Flat] = [i for i in flats_data if i is not None]
-    if not validated_data:
-        raise ValueError(msg.CR_NON_VALID_FLATS_DATA)
-    return validated_data
-
-
 def get_next_url(content: bs) -> str:
     next_btn = content.find("a", class_="paginator__btn--next")
     if not next_btn:
@@ -141,8 +134,7 @@ def run_crawler(url: str) -> None:
             ads_on_page: ResultSet = get_ads_on_page(content)
             ads_urls: list[str] = get_ads_urls(ads_on_page)
             flats_data: list[Flat] = get_flats_data_on_page(ads_urls)
-            validated_data: list[Flat] = validate_flats_data(flats_data)
-            insert_flats_data_db(validated_data)
+            insert_flats_data_db(flats_data)
             logger.info(msg.CR_PROCESS.format(num, page_count))
 
             sleep(cfg.SLEEP_TIME)

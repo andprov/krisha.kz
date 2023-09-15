@@ -47,12 +47,6 @@ CR_KEY_DATA_ERROR = (
     "or collection contains empty data"
 )
 CR_KEY_GET_ERROR = "Crawler - Key < {} > in JS not found"
-CR_NON_VALID_FLATS_DATA = (
-    "Crawler - Flats_data list does not contain instances of Flat "
-    "class. "
-    "Please check methods of Flat class responsible for searching data "
-    "on Ad page"
-)
 CR_CITY_VALIDATE = (
     "Crawler - Parameter 'city' contains unavailable data: < {} >. "
     "An integer from 0 to 20 is required. "
