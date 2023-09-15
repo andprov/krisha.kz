@@ -11,9 +11,9 @@ con = sqlite3.connect(DB_PATH)
 cursor = con.cursor()
 
 
-def create_db():
+def create_db() -> None:
     """Create DB table."""
-    query = """
+    query: str = """
             CREATE TABLE IF NOT EXISTS flats
             (
                 id          INTEGER NOT NULL PRIMARY KEY,
@@ -44,9 +44,9 @@ def create_db():
         con.executescript(query)
 
 
-def check_db_exists():
+def check_db_exists() -> None:
     """Check DB."""
-    query = """
+    query: str = """
             SELECT name FROM sqlite_master
             WHERE type='table' AND name='flats';
             """

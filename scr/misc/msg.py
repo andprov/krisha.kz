@@ -65,7 +65,7 @@ CR_BOOL_VALIDATE = (
 )
 CR_GET_ROOMS_URL = (
     "Crawler - Parameter 'rooms' contains unavailable data < {} >. "
-    "Available format is a <list> with no more than five "
+    "Available format is a <tuple> with no more than five "
     "elements, where each element is a positive integer "
     "from 1 to 5. "
     "Default value < {} > will be used"
