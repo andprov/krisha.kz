@@ -89,7 +89,7 @@ def get_ads_urls(ads_on_page: ResultSet) -> list[str]:
     return ads_urls
 
 
-def get_flats_data_on_page(ads_urls: list[str]) -> list[Flat | None]:
+def get_flats_data_on_page(ads_urls: list[str]) -> list[Flat]:
     missed_ad_counter: int = 0
     flats_data: list = []
     for url in ads_urls:
@@ -109,13 +109,6 @@ def get_flats_data_on_page(ads_urls: list[str]) -> list[Flat | None]:
 
     logger.debug(msg.CR_ADS_ON_PAGE_OK)
     return flats_data
-
-
-def validate_flats_data(flats_data: list[Flat | None]) -> list[Flat]:
-    validated_data: list[Flat] = [i for i in flats_data if i is not None]
-    if not validated_data:
-        raise ValueError(msg.CR_NON_VALID_FLATS_DATA)
-    return validated_data
 
 
 def get_next_url(content: bs) -> str:
@@ -140,9 +133,8 @@ def run_crawler(url: str) -> None:
         for num in trange(1, page_count + 1):
             ads_on_page: ResultSet = get_ads_on_page(content)
             ads_urls: list[str] = get_ads_urls(ads_on_page)
-            flats_data: list[Flat | None] = get_flats_data_on_page(ads_urls)
-            validated_data: list[Flat] = validate_flats_data(flats_data)
-            insert_flats_data_db(validated_data)
+            flats_data: list[Flat] = get_flats_data_on_page(ads_urls)
+            insert_flats_data_db(flats_data)
             logger.info(msg.CR_PROCESS.format(num, page_count))
 
             sleep(cfg.SLEEP_TIME)

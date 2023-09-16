@@ -21,7 +21,7 @@ class FirstPage:
         price_to: int = None,
         owner: bool = False,
     ) -> str:
-        """Generate a URL using the provided data.
+        """Generate URL using the provided data.
 
         Args:
             city (int): City code.
