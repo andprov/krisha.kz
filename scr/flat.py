@@ -12,19 +12,19 @@ class Flat:
     """Flat object."""
 
     def __init__(self):
-        self.id = None
-        self.uuid = None
-        self.url = None
-        self.room = None
-        self.square = None
-        self.city = None
-        self.lat = None
-        self.lon = None
-        self.description = None
-        self.photo = None
-        self.price = None
-        self.star = None
-        self.focus = None
+        self.id: int = None
+        self.uuid: str = None
+        self.url: str = None
+        self.room: int = None
+        self.square: int = None
+        self.city: str = None
+        self.lat: float = None
+        self.lon: float = None
+        self.description: str = None
+        self.photo: str = None
+        self.price: int = None
+        self.star: int = None
+        self.focus: int = None
 
     def from_db(self):
         """Create Flat object from DB."""
