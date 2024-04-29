@@ -2,6 +2,7 @@
 
 [![License: MIT](https://img.shields.io/github/license/andprov/krisha.kz?color=blueviolet)](https://github.com/andprov/krisha.kz/blob/main/LICENSE.md)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Python versions](https://img.shields.io/badge/python-_3.10_|_3.11_|_3.12-blue)](https://www.python.org/)
 
 # Описание
 
@@ -16,11 +17,6 @@
 Реализован выбор параметров поиска, повторяющий функционал сайта.
 Для указания параметров поиска, в корневом каталоге проекта находится 
 файл `SEARCH_PARAMETERS.json`.
-
-
-### 💡 Необходимо для работы
-- [Python3.9 и выше](https://www.python.org/)
-- [SQLite3](https://www.sqlite.org/index.html)
 
 ### Сторонние библиотеки используемые в проекте
 - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)

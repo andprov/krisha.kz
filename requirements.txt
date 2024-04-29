@@ -2,6 +2,6 @@ colorlog==6.7.0
 beautifulsoup4==4.12.2
 matplotlib==3.7.1
 pandas==2.0.3
-PyYAML==6.0
+PyYAML==6.0.1
 requests==2.31.0
 tqdm==4.65.0
