@@ -2,11 +2,11 @@ import logging
 from unittest import TestCase
 
 from bs4 import BeautifulSoup as bs
+from krisha.crawler.first_page import FirstPage
+from krisha.crawler.flat import Flat
 
-from scr.first_page import FirstPage
-from scr.flat import Flat
 from tests.fixtures.fx_first_page import first_page_test_data
-from tests.fixtures.fx_flat import valid_script, expected_data
+from tests.fixtures.fx_flat import expected_data, valid_script
 
 logging.getLogger().disabled = True
 

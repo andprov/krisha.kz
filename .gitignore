@@ -1,6 +1,8 @@
 __pycache__/
+.pytest_cache/
 .idea/
 .venv/
 .vscode/
+krisha.egg-info/
+logs/
 db.sqlite
-*.log

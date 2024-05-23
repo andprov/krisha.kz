@@ -4,26 +4,34 @@ import sys
 from time import sleep
 
 import requests
-from bs4 import BeautifulSoup as bs, ResultSet
+from bs4 import BeautifulSoup as bs
+from bs4 import ResultSet
 from requests import Response
 from tqdm import trange
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-import scr.config as cfg
-import scr.misc.msg as msg
-from db.queries import insert_flats_data_db
-from scr.flat import Flat
-from scr.misc.exceptions import MissedAdMaximum, RequestErrorsMaximum
+import krisha.common.msg as msg
+from krisha.config.app_config import Config
+from krisha.crawler.flat_parser import CreateFlat
+from krisha.db.base import DBConnection
+from krisha.db.queries import insert_flats_data_db
+from krisha.entities.flat import Flat
+from krisha.exceptions.crawler import (
+    MaximumMissedAdError,
+    MaximumRetryRequestsError,
+)
 
 logger = logging.getLogger()
 
 
-def get_response(url: str) -> Response:
-    for delay in cfg.RETRY_DELAY:
+def get_response(url: str, config: Config) -> Response:
+    for delay in config.parser.retry_delay:
         logger.debug(msg.REQUEST_START.format(url))
         try:
-            response: Response = requests.get(
-                url, headers=cfg.USER_AGENT, timeout=20
+            response = requests.get(
+                url,
+                headers=config.parser.user_agent,
+                timeout=20,
             )
             response.raise_for_status()
             if response.status_code == requests.codes.ok:
@@ -36,7 +44,7 @@ def get_response(url: str) -> Response:
 
             sleep(delay)
 
-    raise RequestErrorsMaximum(msg.REQUEST_ERRORS_MAXIMUM)
+    raise MaximumRetryRequestsError
 
 
 def get_content(response: Response) -> bs:
@@ -55,9 +63,9 @@ def get_ads_count(content: bs) -> int:
     return ads_count
 
 
-def get_page_count(content: bs, ads_count: int) -> int:
+def get_page_count(content: bs, ads_count: int, config: Config) -> int:
     page_count = 1
-    if ads_count > cfg.ADS_ON_PAGE:
+    if ads_count > config.parser.ads_on_page:
         paginator = content.find("nav", class_="paginator")
         if not paginator:
             raise ValueError(msg.CR_SOUP_FIND_ERROR.format("paginator"))
@@ -70,13 +78,13 @@ def get_ads_on_page(content: bs) -> ResultSet:
     ads_section = content.find("section", class_="a-search-list")
     if not ads_section:
         raise ValueError(msg.CR_SOUP_FIND_ERROR.format("a-search-list"))
-    ads: ResultSet = ads_section.find_all("div", attrs={"data-id": True})
+    ads = ads_section.find_all("div", attrs={"data-id": True})
     if not ads:
         raise ValueError(msg.CR_SOUP_FIND_ERROR.format("data-id"))
     return ads
 
 
-def get_ads_urls(ads_on_page: ResultSet) -> list[str]:
+def get_ads_urls(home_url, ads_on_page: ResultSet) -> list[str]:
     ads_urls = []
     for ad in ads_on_page:
         title = ad.find("a", class_="a-card__title")
@@ -85,63 +93,63 @@ def get_ads_urls(ads_on_page: ResultSet) -> list[str]:
         ad_url = title.get("href")
         if not ad_url:
             raise ValueError(msg.CR_SOUP_FIND_ERROR.format("href"))
-        ads_urls.append(cfg.HOME_URL + ad_url)
+        ads_urls.append(home_url + ad_url)
     return ads_urls
 
 
-def get_flats_data_on_page(ads_urls: list[str]) -> list[Flat]:
-    missed_ad_counter: int = 0
-    flats_data: list = []
+def get_flats_data_on_page(ads_urls: list[str], config: Config) -> list[Flat]:
+    missed_ad_counter = 0
+    flats_data = []
     for url in ads_urls:
         try:
-            response: Response = get_response(url)
-        except RequestErrorsMaximum:
+            response = get_response(url, config)
+        except MaximumRetryRequestsError as error:
             missed_ad_counter += 1
-            if missed_ad_counter > cfg.MAX_SKIP_AD:
-                raise MissedAdMaximum(msg.CR_MISSED_MAXIMUM)
+            if missed_ad_counter > config.parser.max_skip_ad:
+                raise MaximumMissedAdError from error
             logger.warning(msg.CR_SKIP_AD)
         else:
-            content: bs = get_content(response)
-            flats_data.append(Flat.from_ad(content, url))
+            content = get_content(response)
+            flats_data.append(CreateFlat.get_flat(content, url))
             logger.debug(msg.CR_FLAT_DATA_OK)
 
-        sleep(cfg.SLEEP_TIME)
+        sleep(config.parser.sleep_time)
 
     logger.debug(msg.CR_ADS_ON_PAGE_OK)
     return flats_data
 
 
-def get_next_url(content: bs) -> str:
+def get_next_url(home_url, content: bs) -> str:
     next_btn = content.find("a", class_="paginator__btn--next")
     if not next_btn:
         raise ValueError(msg.CR_SOUP_FIND_ERROR.format("paginator__btn--next"))
     next_btn_url = next_btn.get("href")
     if not next_btn_url:
         raise ValueError(msg.CR_SOUP_FIND_ERROR.format("href"))
-    url: str = cfg.HOME_URL + next_btn_url
+    url = home_url + next_btn_url
     logger.debug(msg.CR_NEXT_PAGE_OK)
     return url
 
 
-def run_crawler(url: str) -> None:
-    response: Response = get_response(url)
-    content: bs = get_content(response)
-    ads_count: int = get_ads_count(content)
-    page_count: int = get_page_count(content, ads_count)
+def run_crawler(config: Config, connector: DBConnection, url: str) -> None:
+    response = get_response(url, config)
+    content = get_content(response)
+    ads_count = get_ads_count(content)
+    page_count = get_page_count(content, ads_count, config)
 
     with logging_redirect_tqdm():
         for num in trange(1, page_count + 1):
-            ads_on_page: ResultSet = get_ads_on_page(content)
-            ads_urls: list[str] = get_ads_urls(ads_on_page)
-            flats_data: list[Flat] = get_flats_data_on_page(ads_urls)
-            insert_flats_data_db(flats_data)
+            ads_on_page = get_ads_on_page(content)
+            ads_urls = get_ads_urls(config.parser.home_url, ads_on_page)
+            flats_data = get_flats_data_on_page(ads_urls, config)
+            insert_flats_data_db(connector, flats_data)
             logger.info(msg.CR_PROCESS.format(num, page_count))
 
-            sleep(cfg.SLEEP_TIME)
+            sleep(config.parser.sleep_time)
 
             if num < page_count:
-                next_url: str = get_next_url(content)
-                response: Response = get_response(next_url)
-                content: bs = get_content(response)
+                next_url = get_next_url(config.parser.home_url, content)
+                response = get_response(next_url, config)
+                content = get_content(response)
 
     logger.info(msg.CR_STOPPED)
