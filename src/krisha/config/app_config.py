@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from krisha.config.logs import setup_logs
-from krisha.config.models.search import SearchParameters, get_search_parameters
+from krisha.config.search import SearchParameters, get_search_parameters
 from krisha.config.parser import ParserConfig, get_parser_config
 from krisha.config.path import AppPaths, get_app_path
 
