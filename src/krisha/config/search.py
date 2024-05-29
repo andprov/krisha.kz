@@ -5,13 +5,12 @@ from json import JSONDecodeError
 from typing import Any
 
 import krisha.common.msg as msg
-from krisha.config.models.base import BaseConfigModel
 
 logger = logging.getLogger()
 
 
 @dataclass
-class SearchParameters(BaseConfigModel):
+class SearchParameters:
     """Init and validate search parameters.
 
     Attributes:
@@ -32,7 +31,7 @@ class SearchParameters(BaseConfigModel):
     price_to: int | None = None
     owner: bool = False
 
-    def _validate(self) -> None:
+    def __post_init__(self) -> None:
         self._validate_city()
         self._validate_has_photo()
         self._validate_furniture()

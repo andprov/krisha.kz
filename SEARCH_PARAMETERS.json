@@ -2,7 +2,7 @@
   "city": 1,
   "has_photo": true,
   "furniture": true,
-  "rooms": [1, 2],
+  "rooms": [1],
   "price_from": 100000,
   "price_to": 300000,
   "owner": true
