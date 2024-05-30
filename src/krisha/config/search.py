@@ -38,6 +38,7 @@ class SearchParameters:
         self._validate_rooms()
         self._validate_price_from()
         self._validate_price_to()
+        self._validate_owner()
 
     @staticmethod
     def _validate_bool_args(name: str, value: Any) -> bool:
@@ -82,9 +83,10 @@ class SearchParameters:
             self.rooms = None
             return
         rooms = {i for i in self.rooms if isinstance(i, int) and 0 < i < 6}
-        if len(rooms) > 1:
-            rooms = sorted(rooms)
-        self.rooms = rooms
+        if not rooms:
+            self.rooms = None
+            return
+        self.rooms = sorted(rooms)
 
     def _validate_price_from(self) -> None:
         self.price_from = self._validate_price_args(
@@ -95,6 +97,9 @@ class SearchParameters:
         self.price_to = self._validate_price_args(
             "< price_to >", self.price_to
         )
+
+    def _validate_owner(self) -> None:
+        self.owner = self._validate_bool_args("< owner >", self.owner)
 
 
 def get_search_parameters(file_name: str) -> SearchParameters:
