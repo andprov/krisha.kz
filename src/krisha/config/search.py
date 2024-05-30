@@ -53,7 +53,7 @@ class SearchParameters:
     def _validate_price_args(name: str, value: Any) -> int | None:
         if value is None:
             return None
-        if not isinstance(value, int) or value < 0:
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
             logger.warning(
                 msg.CR_GET_PRICE_URL.format(name, type(value), None)
             )
@@ -61,7 +61,11 @@ class SearchParameters:
         return value
 
     def _validate_city(self) -> None:
-        if not isinstance(self.city, int) or not 0 <= self.city < 21:
+        if (
+            isinstance(self.city, bool)
+            or not isinstance(self.city, int)
+            or not 0 <= self.city < 21
+        ):
             logger.warning(msg.CR_CITY_VALIDATE.format(type(self.city), 0))
             self.city = 0
 

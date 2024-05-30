@@ -50,3 +50,19 @@ def test_invalid_parameters():
     assert search_params.price_from is None
     assert search_params.price_to is None
     assert not search_params.owner
+
+
+def test_invalid_parameters_type():
+    invalid_params = {
+        "city": True,
+        "rooms": (1, 2),
+        "price_from": True,
+    }
+    search_params = SearchParameters(**invalid_params)
+    assert search_params.city == 0
+    assert not search_params.has_photo
+    assert not search_params.furniture
+    assert search_params.rooms is None
+    assert search_params.price_from is None
+    assert search_params.price_to is None
+    assert not search_params.owner
