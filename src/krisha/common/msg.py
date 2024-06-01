@@ -45,7 +45,7 @@ CR_KEY_DATA_ERROR = (
 )
 CR_KEY_GET_ERROR = "Crawler - Key < {} > in JS not found"
 CR_CITY_VALIDATE = (
-    "Crawler - Parameter 'city' contains unavailable type: {}. "
+    "Crawler - Parameter 'city' contains unavailable: {}. "
     "An integer from 0 to 20 is required. "
     "Default value < {} > will be used"
 )

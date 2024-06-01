@@ -21,6 +21,7 @@ class ParserConfig:
     sleep_time: int = 2
     max_skip_ad: int = 5
     retry_delay: tuple = (15, 60, 300, 1200, 3600)
+    min_price: int = 0
     home_url: str = "https://krisha.kz"
     rent_url: str = "https://krisha.kz/arenda/kvartiry/"
     sep: str = "&das"
