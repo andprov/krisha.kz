@@ -14,5 +14,5 @@ class Flat:
     description: str
     photo: str
     price: int
-    star: int
-    focus: int
+    star: int | None = None
+    focus: int | None = None

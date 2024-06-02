@@ -73,10 +73,8 @@ class CreateFlat:
             square=cls._get_sub_data(advert, "square"),
             city=address.split(",")[0] if address else None,
             lat=cls._get_sub_data(lat_lon, "lat") if lat_lon else None,
-            lon=cls._get_sub_data(lat_lon, "lat") if lat_lon else None,
+            lon=cls._get_sub_data(lat_lon, "lon") if lat_lon else None,
             description=cls._get_sub_data(adverts, "description"),
             photo=cls._get_sub_data(photos[0], "src") if photos else None,
             price=cls._get_sub_data(advert, "price", required=True),
-            star=0,
-            focus=0,
         )
