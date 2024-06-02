@@ -75,7 +75,7 @@ pip install .
 Запустить скрипт:
 
 ```
-python -m krish.main
+python -m krisha.main
 ```
 
 # Настройка запуска по расписанию
