@@ -23,5 +23,7 @@ def load_config() -> Config:
         path.search_params_file, parser_config
     )
     return Config(
-        path=path, parser_config=parser_config, search_params=search_params
+        path=path,
+        parser_config=parser_config,
+        search_params=search_params,
     )

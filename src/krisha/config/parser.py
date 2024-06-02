@@ -47,6 +47,7 @@ class ParserConfig:
     user_agent: dict = field(default_factory=default_user_agent)
     ads_on_page: int = 20
     sleep_time: int = 2
+    timeout: int = 20
     max_skip_ad: int = 5
     retry_delay: tuple = (15, 60, 300, 1200, 3600)
     min_price: int = 0

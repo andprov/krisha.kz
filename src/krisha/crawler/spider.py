@@ -11,7 +11,7 @@ from tqdm import trange
 from tqdm.contrib.logging import logging_redirect_tqdm
 
 import krisha.common.msg as msg
-from krisha.config.app_config import Config
+from krisha.config.config import Config
 from krisha.crawler.flat_parser import CreateFlat
 from krisha.db.base import DBConnection
 from krisha.db.queries import insert_flats_data_db
@@ -31,7 +31,7 @@ def get_response(url: str, config: Config) -> Response:
             response = requests.get(
                 url,
                 headers=config.parser_config.user_agent,
-                timeout=20,
+                timeout=config.parser_config.timeout,
             )
             response.raise_for_status()
             if response.status_code == requests.codes.ok:

@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from krisha.config.app_config import load_config
+from krisha.config.config import load_config
 from krisha.crawler.first_page import FirstPage
 from krisha.crawler.spider import run_crawler
 from krisha.db.service import get_connection
