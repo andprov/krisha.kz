@@ -65,7 +65,7 @@ pip install .
     ```bash
     pip install -e . 
     ```
-- Установить зависимости в editable режиме, с дополнительными инструментами [project.optional-dependencies]
+- Установить зависимости в editable режиме, с дополнительными инструментами `[project.optional-dependencies]`
     ```bash
     pip install -e .[test,lint] 
     ```
