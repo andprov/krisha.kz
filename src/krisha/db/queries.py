@@ -1,15 +1,18 @@
 import logging
 
-import scr.misc.msg as msg
-from db.service import con
-from scr.flat import Flat
+import krisha.common.msg as msg
+from krisha.crawler.flat_parser import Flat
+from krisha.db.base import DBConnection
 
 logger = logging.getLogger()
 
 
-def insert_flats_data_db(flats_data: list[Flat]) -> None:
+def insert_flats_data_db(
+    connector: DBConnection,
+    flats_data: list[Flat],
+) -> None:
     """Insert flats data to DB."""
-    insert_flats_query: str = """
+    insert_flats_query = """
         INSERT OR IGNORE
         INTO flats(id,
                    uuid,
@@ -24,13 +27,13 @@ def insert_flats_data_db(flats_data: list[Flat]) -> None:
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         """
 
-    insert_price_query: str = """
+    insert_price_query = """
         INSERT OR IGNORE
         INTO prices(flat_id, price)
         VALUES (?, ?);
         """
 
-    flats_value: list[tuple] = [
+    flats_value = [
         (
             flat.id,
             flat.uuid,
@@ -45,9 +48,10 @@ def insert_flats_data_db(flats_data: list[Flat]) -> None:
         )
         for flat in flats_data
     ]
-    price_value: list[tuple] = [(flat.id, flat.price) for flat in flats_data]
+    price_value = [(flat.id, flat.price) for flat in flats_data]
 
-    with con:
+    with connector as con:
         con.executemany(insert_flats_query, flats_value)
         con.executemany(insert_price_query, price_value)
-    logger.debug(msg.DB_INSERT_OK)
+        con.commit()
+    logger.info(msg.DB_INSERT_OK)
