@@ -50,7 +50,7 @@ CR_CITY_VALIDATE = (
     "Default value < {} > will be used"
 )
 CR_BOOL_VALIDATE = (
-    "Crawler - Parameter {} contains unavailable type: {}. "
+    "Crawler - Parameter  < {} > contains unavailable type: {}. "
     "Value must be True or False. "
     "Default value < {} > will be used"
 )
@@ -61,7 +61,7 @@ CR_GET_ROOMS_URL = (
     "Default value < {} > will be used"
 )
 CR_GET_PRICE_URL = (
-    "Crawler - Parameter {} contains unavailable type: {}. "
+    "Crawler - Parameter {} contains unavailable: {}. "
     "Available price value is a positive integer from 0 to 1000000. "
     "Default price value < {} > will be used"
 )

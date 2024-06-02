@@ -32,16 +32,23 @@ class SearchParameters:
     owner: bool = False
 
     def __post_init__(self) -> None:
-        self._validate_city()
-        self._validate_has_photo()
-        self._validate_furniture()
-        self._validate_rooms()
-        self._validate_price_from()
-        self._validate_price_to()
-        self._validate_owner()
+        self.city = self._validate_city(self.city)
+        self.has_photo = self._validate_bool_args(self.has_photo, "has_photo")
+        self.furniture = self._validate_bool_args(self.furniture, "furniture")
+        self.rooms = self._validate_rooms(self.rooms)
+        self.price_from = self._validate_price(self.price_from, "price_from")
+        self.price_to = self._validate_price(self.price_to, "price_to")
+        self.owner = self._validate_bool_args(self.owner, "owner")
 
     @staticmethod
-    def _validate_bool_args(name: str, value: Any) -> bool:
+    def _validate_city(city) -> int:
+        if type(city) is int and 0 <= city < 21:
+            return city
+        logger.warning(msg.CR_CITY_VALIDATE.format(type(city), 0))
+        return 0
+
+    @staticmethod
+    def _validate_bool_args(value: Any, name: str) -> bool:
         if not isinstance(value, bool):
             logger.warning(
                 msg.CR_BOOL_VALIDATE.format(f"{name}", type(value), False)
@@ -50,60 +57,25 @@ class SearchParameters:
         return value
 
     @staticmethod
-    def _validate_price_args(name: str, value: Any) -> int | None:
+    def _validate_price(value: Any, name: str) -> int | None:
         if value is None:
+            return
+        if type(value) is int and value >= 0:
+            return value
+        logger.warning(msg.CR_GET_PRICE_URL.format(name, type(value), None))
+        return
+
+    @staticmethod
+    def _validate_rooms(rooms) -> list | None:
+        if rooms is None:
             return None
-        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
-            logger.warning(
-                msg.CR_GET_PRICE_URL.format(name, type(value), None)
-            )
+        if not isinstance(rooms, list) or len(rooms) == 0:
+            logger.warning(msg.CR_GET_ROOMS_URL.format(type(rooms), None))
             return None
-        return value
-
-    def _validate_city(self) -> None:
-        if (
-            isinstance(self.city, bool)
-            or not isinstance(self.city, int)
-            or not 0 <= self.city < 21
-        ):
-            logger.warning(msg.CR_CITY_VALIDATE.format(type(self.city), 0))
-            self.city = 0
-
-    def _validate_has_photo(self) -> None:
-        self.has_photo = self._validate_bool_args(
-            "< has_photo >", self.has_photo
+        valid_rooms = sorted(
+            i for i in rooms if isinstance(i, int) and 0 < i < 6
         )
-
-    def _validate_furniture(self) -> None:
-        self.furniture = self._validate_bool_args(
-            "< furniture >", self.furniture
-        )
-
-    def _validate_rooms(self) -> None:
-        if self.rooms is None:
-            return
-        if not isinstance(self.rooms, list) or len(self.rooms) == 0:
-            logger.warning(msg.CR_GET_ROOMS_URL.format(type(self.rooms), None))
-            self.rooms = None
-            return
-        rooms = {i for i in self.rooms if isinstance(i, int) and 0 < i < 6}
-        if not rooms:
-            self.rooms = None
-            return
-        self.rooms = sorted(rooms)
-
-    def _validate_price_from(self) -> None:
-        self.price_from = self._validate_price_args(
-            "< price_from >", self.price_from
-        )
-
-    def _validate_price_to(self) -> None:
-        self.price_to = self._validate_price_args(
-            "< price_to >", self.price_to
-        )
-
-    def _validate_owner(self) -> None:
-        self.owner = self._validate_bool_args("< owner >", self.owner)
+        return valid_rooms if valid_rooms else None
 
 
 def get_search_parameters(file_name: str) -> SearchParameters:
