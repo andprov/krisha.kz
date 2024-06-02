@@ -34,6 +34,13 @@ def test_get_pars_data():
     pars_data = CreateFlat._get_pars_data(content)
 
     assert pars_data["advert"]["id"] == 680044731
+    assert pars_data["adverts"] == [
+        {
+            "description": "Номер в Апарт-гостинице City Park!",
+            "fullAddress": "Алматы, Наурызбайский р-н, Жунисова",
+            "uuid": "b7331c3a-3219-410a-a04c-47043a354dc7",
+        }
+    ]
 
 
 def test_get_advert_data():
@@ -41,6 +48,16 @@ def test_get_advert_data():
     advert = CreateFlat._get_advert(pars_data, "advert")
 
     assert advert["id"] == 680044731
+    assert advert["map"] == {"lat": 43.260625, "lon": 76.962848}
+    assert advert["photos"] == [
+        {
+            "src": "https://cf-kr.kcdn.online/webp/b7/1-full.jpg",
+            "title": "Аренда квартир в Алматы: 1-комнатная ",
+        }
+    ]
+    assert advert["price"] == 300000
+    assert advert["rooms"] == 1
+    assert advert["square"] == 30
 
 
 def test_get_adverts():
@@ -48,6 +65,8 @@ def test_get_adverts():
     adverts = CreateFlat._get_adverts(pars_data, "adverts")
 
     assert adverts["uuid"] == "b7331c3a-3219-410a-a04c-47043a354dc7"
+    assert adverts["fullAddress"] == "Алматы, Наурызбайский р-н, Жунисова"
+    assert adverts["description"] == "Номер в Апарт-гостинице City Park!"
 
 
 def test_get_sub_data():

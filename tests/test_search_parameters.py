@@ -1,72 +1,17 @@
+import pytest
+
+from tests.fixtures.fx_search_params import search_params_test_data
 from krisha.config.search import SearchParameters
 
 
-def test_default_parameters():
-    search_params = SearchParameters()
+@pytest.mark.parametrize("expected_data, params", search_params_test_data)
+def test_search_parameters_data(expected_data, params):
+    search_params = SearchParameters(**params)
 
-    assert search_params.city == 0
-    assert not search_params.has_photo
-    assert not search_params.furniture
-    assert search_params.rooms is None
-    assert search_params.price_from is None
-    assert search_params.price_to is None
-    assert not search_params.owner
-
-
-def test_valid_parameters():
-    valid_params = {
-        "city": 1,
-        "has_photo": True,
-        "furniture": True,
-        "rooms": [1, 2],
-        "price_from": 10000,
-        "price_to": 50000,
-        "owner": False,
-    }
-    search_params = SearchParameters(**valid_params)
-
-    assert search_params.city == valid_params["city"]
-    assert search_params.has_photo
-    assert search_params.furniture
-    assert search_params.rooms == valid_params["rooms"]
-    assert search_params.price_from == valid_params["price_from"]
-    assert search_params.price_to == valid_params["price_to"]
-    assert not search_params.owner
-
-
-def test_invalid_parameters():
-    invalid_params = {
-        "city": -1,
-        "has_photo": "invalid",
-        "furniture": "invalid",
-        "rooms": [0, 6],
-        "price_from": -10000,
-        "price_to": "invalid",
-        "owner": "invalid",
-    }
-    search_params = SearchParameters(**invalid_params)
-
-    assert search_params.city == 0
-    assert not search_params.has_photo
-    assert not search_params.furniture
-    assert search_params.rooms is None
-    assert search_params.price_from is None
-    assert search_params.price_to is None
-    assert not search_params.owner
-
-
-def test_invalid_parameters_type():
-    invalid_params = {
-        "city": True,
-        "rooms": (1, 2),
-        "price_from": True,
-    }
-    search_params = SearchParameters(**invalid_params)
-
-    assert search_params.city == 0
-    assert not search_params.has_photo
-    assert not search_params.furniture
-    assert search_params.rooms is None
-    assert search_params.price_from is None
-    assert search_params.price_to is None
-    assert not search_params.owner
+    assert search_params.city == expected_data["city"]
+    assert search_params.has_photo == expected_data["has_photo"]
+    assert search_params.furniture == expected_data["furniture"]
+    assert search_params.rooms == expected_data["rooms"]
+    assert search_params.price_from == expected_data["price_from"]
+    assert search_params.price_to == expected_data["price_to"]
+    assert search_params.owner == expected_data["owner"]
