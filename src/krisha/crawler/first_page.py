@@ -41,8 +41,8 @@ class FirstPage:
 
     @classmethod
     def get_url(cls, config: Config) -> str:
-        search = config.search
-        parser = config.parser
+        search = config.search_params
+        parser = config.parser_config
         city_url = parser.cities_url_map.get(search.city)
         param_urls = (
             cls._get_param_url(search.has_photo, parser.has_photo_url),

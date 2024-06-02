@@ -25,12 +25,12 @@ logger = logging.getLogger()
 
 
 def get_response(url: str, config: Config) -> Response:
-    for delay in config.parser.retry_delay:
+    for delay in config.parser_config.retry_delay:
         logger.debug(msg.REQUEST_START.format(url))
         try:
             response = requests.get(
                 url,
-                headers=config.parser.user_agent,
+                headers=config.parser_config.user_agent,
                 timeout=20,
             )
             response.raise_for_status()
@@ -65,7 +65,7 @@ def get_ads_count(content: bs) -> int:
 
 def get_page_count(content: bs, ads_count: int, config: Config) -> int:
     page_count = 1
-    if ads_count > config.parser.ads_on_page:
+    if ads_count > config.parser_config.ads_on_page:
         paginator = content.find("nav", class_="paginator")
         if not paginator:
             raise ValueError(msg.CR_SOUP_FIND_ERROR.format("paginator"))
@@ -105,7 +105,7 @@ def get_flats_data_on_page(ads_urls: list[str], config: Config) -> list[Flat]:
             response = get_response(url, config)
         except MaximumRetryRequestsError as error:
             missed_ad_counter += 1
-            if missed_ad_counter > config.parser.max_skip_ad:
+            if missed_ad_counter > config.parser_config.max_skip_ad:
                 raise MaximumMissedAdError from error
             logger.warning(msg.CR_SKIP_AD)
         else:
@@ -113,7 +113,7 @@ def get_flats_data_on_page(ads_urls: list[str], config: Config) -> list[Flat]:
             flats_data.append(CreateFlat.get_flat(content, url))
             logger.debug(msg.CR_FLAT_DATA_OK)
 
-        sleep(config.parser.sleep_time)
+        sleep(config.parser_config.sleep_time)
 
     logger.debug(msg.CR_ADS_ON_PAGE_OK)
     return flats_data
@@ -140,15 +140,15 @@ def run_crawler(config: Config, connector: DBConnection, url: str) -> None:
     with logging_redirect_tqdm():
         for num in trange(1, page_count + 1):
             ads_on_page = get_ads_on_page(content)
-            ads_urls = get_ads_urls(config.parser.home_url, ads_on_page)
+            ads_urls = get_ads_urls(config.parser_config.home_url, ads_on_page)
             flats_data = get_flats_data_on_page(ads_urls, config)
             insert_flats_data_db(connector, flats_data)
             logger.info(msg.CR_PROCESS.format(num, page_count))
 
-            sleep(config.parser.sleep_time)
+            sleep(config.parser_config.sleep_time)
 
             if num < page_count:
-                next_url = get_next_url(config.parser.home_url, content)
+                next_url = get_next_url(config.parser_config.home_url, content)
                 response = get_response(next_url, config)
                 content = get_content(response)
 
