@@ -3,6 +3,7 @@ from krisha.config.search import SearchParameters
 
 def test_default_parameters():
     search_params = SearchParameters()
+
     assert search_params.city == 0
     assert not search_params.has_photo
     assert not search_params.furniture
@@ -23,6 +24,7 @@ def test_valid_parameters():
         "owner": False,
     }
     search_params = SearchParameters(**valid_params)
+
     assert search_params.city == valid_params["city"]
     assert search_params.has_photo
     assert search_params.furniture
@@ -43,6 +45,7 @@ def test_invalid_parameters():
         "owner": "invalid",
     }
     search_params = SearchParameters(**invalid_params)
+
     assert search_params.city == 0
     assert not search_params.has_photo
     assert not search_params.furniture
@@ -59,6 +62,7 @@ def test_invalid_parameters_type():
         "price_from": True,
     }
     search_params = SearchParameters(**invalid_params)
+
     assert search_params.city == 0
     assert not search_params.has_photo
     assert not search_params.furniture

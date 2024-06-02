@@ -26,8 +26,10 @@ class FirstPage:
         return re.sub(r"\b5\b", "5.100", parser.sep.join(room_data))
 
     @staticmethod
-    def _get_price_url(price: int, url: str) -> str | None:
-        return f"{url}{price}" if price else None
+    def _get_price_url(price: int | None, url: str) -> str | None:
+        if price is None:
+            return
+        return f"{url}{price}"
 
     @staticmethod
     def _concatenate_params_url(
