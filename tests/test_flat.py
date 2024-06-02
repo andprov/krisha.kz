@@ -5,10 +5,10 @@ from krisha.crawler.flat_parser import CreateFlat
 from krisha.entities.flat import Flat
 
 
-content = BeautifulSoup(valid_script, "html.parser")
+CONTENT = BeautifulSoup(valid_script, "html.parser")
 
 
-def test_valid_data():
+def test_flat_valid_data():
     expected_flat = Flat(
         id=680044731,
         uuid="b7331c3a-3219-410a-a04c-47043a354dc7",
@@ -25,13 +25,13 @@ def test_valid_data():
         focus=None,
     )
     url = "https://krisha.kz/a/show/680044731"
-    flat = CreateFlat.get_flat(content, url)
+    flat = CreateFlat.get_flat(CONTENT, url)
 
     assert flat == expected_flat
 
 
 def test_get_pars_data():
-    pars_data = CreateFlat._get_pars_data(content)
+    pars_data = CreateFlat._get_pars_data(CONTENT)
 
     assert pars_data["advert"]["id"] == 680044731
     assert pars_data["adverts"] == [
@@ -44,7 +44,7 @@ def test_get_pars_data():
 
 
 def test_get_advert_data():
-    pars_data = CreateFlat._get_pars_data(content)
+    pars_data = CreateFlat._get_pars_data(CONTENT)
     advert = CreateFlat._get_advert(pars_data, "advert")
 
     assert advert["id"] == 680044731
@@ -61,7 +61,7 @@ def test_get_advert_data():
 
 
 def test_get_adverts():
-    pars_data = CreateFlat._get_pars_data(content)
+    pars_data = CreateFlat._get_pars_data(CONTENT)
     adverts = CreateFlat._get_adverts(pars_data, "adverts")
 
     assert adverts["uuid"] == "b7331c3a-3219-410a-a04c-47043a354dc7"
