@@ -1,9 +1,9 @@
 import pytest
 
-from tests.fixtures.fx_first_page import first_page_test_data
 from krisha.config.app_config import load_config
 from krisha.config.search import SearchParameters
 from krisha.crawler.first_page import FirstPage
+from tests.fixtures.fx_first_page import first_page_test_data
 
 
 @pytest.mark.parametrize("expected_url, params", first_page_test_data)

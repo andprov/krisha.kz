@@ -1,9 +1,8 @@
 from bs4 import BeautifulSoup
 
-from tests.fixtures.fx_flat import valid_script
 from krisha.crawler.flat_parser import CreateFlat
 from krisha.entities.flat import Flat
-
+from tests.fixtures.fx_flat import valid_script
 
 CONTENT = BeautifulSoup(valid_script, "html.parser")
 

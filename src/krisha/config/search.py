@@ -103,7 +103,7 @@ class SearchParameters:
             return
         min_rooms = parser_config.min_rooms
         max_rooms = parser_config.max_rooms
-        if not type(rooms) is list or len(rooms) == min_rooms:
+        if type(rooms) is not list or len(rooms) == min_rooms:
             logger.warning(msg.CR_GET_ROOMS_URL.format(type(rooms), None))
             return
         valid_rooms = sorted(

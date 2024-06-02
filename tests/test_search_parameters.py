@@ -1,8 +1,8 @@
 import pytest
 
 from krisha.config.app_config import load_config
-from tests.fixtures.fx_search_params import search_params_test_data
 from krisha.config.search import SearchParameters
+from tests.fixtures.fx_search_params import search_params_test_data
 
 
 @pytest.mark.parametrize("expected_data, params", search_params_test_data)
