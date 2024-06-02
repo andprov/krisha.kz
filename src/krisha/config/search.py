@@ -49,12 +49,12 @@ class SearchParameters:
 
     @staticmethod
     def _validate_bool_args(value: Any, name: str) -> bool:
-        if not isinstance(value, bool):
-            logger.warning(
-                msg.CR_BOOL_VALIDATE.format(f"{name}", type(value), False)
-            )
-            return False
-        return value
+        if type(value) is bool:
+            return value
+        logger.warning(
+            msg.CR_BOOL_VALIDATE.format(f"{name}", type(value), False)
+        )
+        return False
 
     @staticmethod
     def _validate_price(value: Any, name: str) -> int | None:
@@ -68,13 +68,11 @@ class SearchParameters:
     @staticmethod
     def _validate_rooms(rooms) -> list | None:
         if rooms is None:
-            return None
-        if not isinstance(rooms, list) or len(rooms) == 0:
+            return
+        if not type(rooms) is list or len(rooms) == 0:
             logger.warning(msg.CR_GET_ROOMS_URL.format(type(rooms), None))
-            return None
-        valid_rooms = sorted(
-            i for i in rooms if isinstance(i, int) and 0 < i < 6
-        )
+            return
+        valid_rooms = sorted(i for i in rooms if type(i) is int and 0 < i < 6)
         return valid_rooms if valid_rooms else None
 
 
