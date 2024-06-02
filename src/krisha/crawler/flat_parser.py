@@ -11,6 +11,8 @@ logger = logging.getLogger()
 
 
 class CreateFlat:
+    """Pars content data and create Flat object."""
+
     @staticmethod
     def _get_pars_data(content) -> dict:
         script = content.find("script", id="jsdata")

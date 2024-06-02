@@ -14,27 +14,8 @@ def default_user_agent():
     }
 
 
-@dataclass(frozen=True)
-class ParserConfig:
-    user_agent: dict = field(default_factory=default_user_agent)
-    ads_on_page: int = 20
-    sleep_time: int = 2
-    max_skip_ad: int = 5
-    retry_delay: tuple = (15, 60, 300, 1200, 3600)
-    min_price: int = 0
-    home_url: str = "https://krisha.kz"
-    rent_url: str = "https://krisha.kz/arenda/kvartiry/"
-    sep: str = "&das"
-    q_pref: str = "?das"
-    equ: str = "="
-    br_equ: str = "[]="
-    has_photo_url: str = "[_sys.hasphoto]=1"
-    furniture_url: str = "[live.furniture]=1"
-    rooms_url: str = "[live.rooms]"
-    prices_from_url: str = "[price][from]="
-    prices_to_url: str = "[price][to]="
-    owner_url: str = "[who]=1"
-    cities_url_map = {
+def get_cities_url_map():
+    return {
         0: "",
         1: "almaty/",
         2: "astana/",
@@ -57,6 +38,33 @@ class ParserConfig:
         19: "juzhno-kazahstanskaja-oblast/",
         20: "ulitayskay-oblast/",
     }
+
+
+@dataclass(frozen=True)
+class ParserConfig:
+    """Parser configuration."""
+
+    user_agent: dict = field(default_factory=default_user_agent)
+    ads_on_page: int = 20
+    sleep_time: int = 2
+    max_skip_ad: int = 5
+    retry_delay: tuple = (15, 60, 300, 1200, 3600)
+    min_price: int = 0
+    min_rooms: int = 0
+    max_rooms: int = 5
+    home_url: str = "https://krisha.kz"
+    rent_url: str = "https://krisha.kz/arenda/kvartiry/"
+    sep: str = "&das"
+    q_pref: str = "?das"
+    equ: str = "="
+    br_equ: str = "[]="
+    has_photo_url: str = "[_sys.hasphoto]=1"
+    furniture_url: str = "[live.furniture]=1"
+    rooms_url: str = "[live.rooms]"
+    prices_from_url: str = "[price][from]="
+    prices_to_url: str = "[price][to]="
+    owner_url: str = "[who]=1"
+    cities_url_map: dict = field(default_factory=get_cities_url_map)
 
 
 def get_parser_config() -> ParserConfig:

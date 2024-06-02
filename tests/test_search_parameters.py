@@ -1,12 +1,14 @@
 import pytest
 
+from krisha.config.app_config import load_config
 from tests.fixtures.fx_search_params import search_params_test_data
 from krisha.config.search import SearchParameters
 
 
 @pytest.mark.parametrize("expected_data, params", search_params_test_data)
 def test_search_parameters_data(expected_data, params):
-    search_params = SearchParameters(**params)
+    config = load_config()
+    search_params = SearchParameters(config.parser_config, **params)
 
     assert search_params.city == expected_data["city"]
     assert search_params.has_photo == expected_data["has_photo"]
