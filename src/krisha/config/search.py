@@ -69,7 +69,6 @@ class SearchParameters:
     def _validate_city(city, parser_config: ParserConfig) -> int:
         min_city_idx = min(parser_config.cities_url_map)
         max_city_idx = max(parser_config.cities_url_map)
-
         if type(city) is int and min_city_idx <= city <= max_city_idx:
             return city
         logger.warning(msg.CR_CITY_VALIDATE.format(type(city), min_city_idx))
