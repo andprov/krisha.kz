@@ -7,3 +7,4 @@ logs/
 db.sqlite
 *.log
 _sql/
+.ruff_cache
