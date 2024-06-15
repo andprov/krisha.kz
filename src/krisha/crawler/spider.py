@@ -11,7 +11,7 @@ from tqdm import trange
 from tqdm.contrib.logging import logging_redirect_tqdm
 
 import krisha.common.msg as msg
-from krisha.config.config import Config
+from krisha.config import Config
 from krisha.crawler.flat_parser import CreateFlat
 from krisha.db.base import DBConnection
 from krisha.db.queries import insert_flats_data_db

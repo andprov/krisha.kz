@@ -1,7 +1,7 @@
 import logging
 import re
 
-from krisha.config.config import Config
+from krisha.config import Config
 from krisha.config.parser import ParserConfig
 
 logger = logging.getLogger()
