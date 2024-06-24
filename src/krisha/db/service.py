@@ -27,11 +27,11 @@ def create_db(connector: DBConnection) -> None:
             CREATE TABLE IF NOT EXISTS prices
             (
                 id       INTEGER PRIMARY KEY NOT NULL,
-                DATE     DATE DEFAULT (DATE('now', 'localtime')),
+                date     DATE DEFAULT (DATE('now', 'localtime')),
                 flat_id  INTEGER             NOT NULL,
                 price    INTEGER             NOT NULL,
                 FOREIGN KEY (flat_id) REFERENCES flats (id),
-                UNIQUE (DATE, flat_id)
+                UNIQUE (date, flat_id)
             );
             """
 
