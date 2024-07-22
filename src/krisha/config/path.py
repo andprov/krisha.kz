@@ -8,7 +8,6 @@ class AppPaths:
     db_file: str = "db.sqlite"
     logging_config_file: str = "logging.ini"
     search_params_file: str = "SEARCH_PARAMETERS.json"
-    parser_config_file: str = "PARSER_CONFIG.json"
 
 
 def get_app_path() -> AppPaths:
