@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from krisha.crawler.flat_parser import CreateFlat
+from krisha.crawler.flat_parser import FlatParser
 from krisha.entities.flat import Flat
 from tests.fixtures.fx_flat import valid_script
 
@@ -24,13 +24,13 @@ def test_flat_valid_data():
         focus=None,
     )
     url = "https://krisha.kz/a/show/680044731"
-    flat = CreateFlat.get_flat(CONTENT, url)
+    flat = FlatParser.get_flat(CONTENT, url)
 
     assert flat == expected_flat
 
 
 def test_get_pars_data():
-    pars_data = CreateFlat._get_pars_data(CONTENT)
+    pars_data = FlatParser._get_pars_data(CONTENT)
 
     assert pars_data["advert"]["id"] == 680044731
     assert pars_data["adverts"] == [
@@ -43,8 +43,8 @@ def test_get_pars_data():
 
 
 def test_get_advert_data():
-    pars_data = CreateFlat._get_pars_data(CONTENT)
-    advert = CreateFlat._get_advert(pars_data, "advert")
+    pars_data = FlatParser._get_pars_data(CONTENT)
+    advert = FlatParser._get_advert(pars_data, "advert")
 
     assert advert["id"] == 680044731
     assert advert["map"] == {"lat": 43.260625, "lon": 76.962848}
@@ -60,8 +60,8 @@ def test_get_advert_data():
 
 
 def test_get_adverts():
-    pars_data = CreateFlat._get_pars_data(CONTENT)
-    adverts = CreateFlat._get_adverts(pars_data, "adverts")
+    pars_data = FlatParser._get_pars_data(CONTENT)
+    adverts = FlatParser._get_adverts(pars_data, "adverts")
 
     assert adverts["uuid"] == "b7331c3a-3219-410a-a04c-47043a354dc7"
     assert adverts["fullAddress"] == "Алматы, Наурызбайский р-н, Жунисова"
@@ -71,5 +71,5 @@ def test_get_adverts():
 def test_get_sub_data():
     data = {"key1": "value1", "key2": "value2"}
 
-    assert CreateFlat._get_sub_data(data, "key1") == "value1"
-    assert CreateFlat._get_sub_data(data, "key3") is None
+    assert FlatParser._get_sub_data(data, "key1") == "value1"
+    assert FlatParser._get_sub_data(data, "key3") is None

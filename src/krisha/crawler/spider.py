@@ -12,7 +12,7 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 
 import krisha.common.msg as msg
 from krisha.config import Config
-from krisha.crawler.flat_parser import CreateFlat
+from krisha.crawler.flat_parser import FlatParser
 from krisha.db.base import DBConnection
 from krisha.db.queries import insert_flats_data_db
 from krisha.entities.flat import Flat
@@ -97,7 +97,11 @@ def get_ads_urls(home_url, ads_on_page: ResultSet) -> list[str]:
     return ads_urls
 
 
-def get_flats_data_on_page(ads_urls: list[str], config: Config) -> list[Flat]:
+def get_flats_data_on_page(
+    ads_urls: list[str],
+    config: Config,
+    flat_parser: FlatParser,
+) -> list[Flat]:
     missed_ad_counter = 0
     flats_data = []
     for url in ads_urls:
@@ -110,7 +114,7 @@ def get_flats_data_on_page(ads_urls: list[str], config: Config) -> list[Flat]:
             logger.warning(msg.CR_SKIP_AD)
         else:
             content = get_content(response)
-            flats_data.append(CreateFlat.get_flat(content, url))
+            flats_data.append(flat_parser.get_flat(content, url))
             logger.debug(msg.CR_FLAT_DATA_OK)
 
         sleep(config.parser_config.sleep_time)
@@ -136,12 +140,13 @@ def run_crawler(config: Config, connector: DBConnection, url: str) -> None:
     content = get_content(response)
     ads_count = get_ads_count(content)
     page_count = get_page_count(content, ads_count, config)
+    flat_parser = FlatParser
 
     with logging_redirect_tqdm():
         for num in trange(1, page_count + 1):
             ads_on_page = get_ads_on_page(content)
             ads_urls = get_ads_urls(config.parser_config.home_url, ads_on_page)
-            flats_data = get_flats_data_on_page(ads_urls, config)
+            flats_data = get_flats_data_on_page(ads_urls, config, flat_parser)
             insert_flats_data_db(connector, flats_data)
             logger.info(msg.CR_PROCESS.format(num, page_count))
 

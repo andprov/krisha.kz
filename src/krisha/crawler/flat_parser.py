@@ -10,7 +10,7 @@ from krisha.entities.flat import Flat
 logger = logging.getLogger()
 
 
-class CreateFlat:
+class FlatParser:
     """Pars content data and create Flat object."""
 
     @staticmethod
