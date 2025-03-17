@@ -14,7 +14,6 @@ Searches and views listings based on the specified [parameters:](#params):
 - Visits the detailed description pages of each listing and collects data.
 - Stores results in SQLite database.
 
-Реализован выбор параметров поиска, повторяющий функционал сайта.
 
 Search parameters selection replicates the website's functionality. To specify search parameters, use the `SEARCH_PARAMETERS.json` file in the project's root directory.
 
