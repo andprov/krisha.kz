@@ -1,4 +1,4 @@
-[![EN](https://img.shields.io/badge/README-EN-red.svg)](https://github.com/andprov/krisha.kz/edit/main/README.md)
+[![EN](https://img.shields.io/badge/README-EN-red.svg)](https://github.com/andprov/krisha.kz/blob/main/README.md)
 
 # Парсер сайта аренды недвижимости krisha.kz
 
