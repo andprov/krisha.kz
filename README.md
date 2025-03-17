@@ -1,147 +1,147 @@
-# Парсер сайта аренды недвижимости krisha.kz
+[![RU](https://img.shields.io/badge/README-RU-red.svg)](https://github.com/andprov/krisha.kz/edit/main/README.ru.md)
+
+# Real Estate Rental Site Parser krisha.kz
 
 [![License: MIT](https://img.shields.io/github/license/andprov/krisha.kz?color=blueviolet)](https://github.com/andprov/krisha.kz/blob/main/LICENSE.md)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Python versions](https://img.shields.io/badge/python-_3.10_|_3.11_|_3.12-blue)](https://www.python.org/)
 
-# Описание
+# Description
 
-По заданным [параметрам](#params) осуществляет поиск и просмотр объявлений:
+Searches and views listings based on the specified [parameters:](#params):
 
-- Запрашивает данные со страниц предварительного просмотра объявлений.
-  Находит ссылки на страницы с детальным описанием.
-- Проходит по страницам с детальным описанием каждого объявления и собирает
-  данные.
-- После обхода двадцати объявлений на странице, сохраняет данные в SQLite базу,
-  переходит на следующую страницу.
+- Requests data from preview pages of listings. Finds links to pages with detailed descriptions.
+- Visits the detailed description pages of each listing and collects data.
+- Stores results in SQLite database.
 
 Реализован выбор параметров поиска, повторяющий функционал сайта.
 
-Для указания параметров поиска, в корневом каталоге проекта находится
-файл `SEARCH_PARAMETERS.json`.
+Search parameters selection replicates the website's functionality. To specify search parameters, use the `SEARCH_PARAMETERS.json` file in the project's root directory.
 
-### Сторонние библиотеки используемые в проекте
+### Third-party libraries used in the project
 
 - [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/bs4/doc/)
 - [requests](https://requests.readthedocs.io/en/latest/)
 
-# Установка и запуск
+# Installation and Running
 
-Клонировать репозиторий:
+Clone the repository:
 
-```
+```shell
 git clone <https or SSH URL>
 ```
 
-Перейти в папку проекта:
+Navigate to the project folder:
 
-```
+```shell
 cd krisha.kz
 ```
 
-Создать виртуальное окружение:
+Create a virtual environment:
 
-```
+```shell
 python3 -m venv .venv
 ```
 
-Активировать виртуальное окружение:
+Activate the virtual environment:
 
-```
+```shell
 source .venv/bin/activate
 ```
 
-Установить зависимости.
+Install dependencies:
 
-Для использования:
+- for use
 
-```
-pip install .
-```
-
-Для разработки:
-
-- Установить зависимости в editable режиме:
-    ```bash
-    pip install -e . 
+    ```shell
+    pip install .
     ```
-- Установить зависимости в editable режиме, с дополнительными инструментами `[project.optional-dependencies]`
-    ```bash
+
+- for dev in editable mode
+
+    ```shell
     pip install -e .[test,lint] 
     ```
 
-Указать параметры поиска в фале [SEARCH_PARAMETERS.json](SEARCH_PARAMETERS.json). см. [примеры](#examples)
+Specify search parameters in the [SEARCH_PARAMETERS.json](SEARCH_PARAMETERS.json) file. See [examples](#examples)
 
-Запустить скрипт:
+Run the script:
 
-```
+```shell
 python -m krisha.main
 ```
 
-# Настройка запуска по расписанию
+# Setting Up Scheduled Runs
 
-Отредактировать файл [cron.sh](cron.sh), внести путь к директории проекта.
+Edit the [cron.sh](cron.sh) file, adding your project path:
 
-При необходимости, добавить права для выполнения `cron.sh`:
+```shell
+#!/bin/bash
+cd /<PATH>/krisha.kz
+source .venv/bin/activate
+python -m krisha.main
+```
 
-```bash
+If necessary, add the rights to execute `cron.sh`:
+
+```shell
 chmod +x /<PATH>/krisha.kz/cron.sh
 ```
 
-Открыть настройки cron:
+Open cron settings:
 
-```
+```shell
 crontab -e
 ```
 
-Внести запись с настройкой запуска:
+Add a cron job entry:
 
+```shell
+# Daily run at 12 PM.
+0 12 * * * /<PATH>/krisha.kz/cron.sh
 ```
-# Ежедневный запуск в 12 часов.
-0 12 * * * /<PATH>/<PATH>/krisha.kz/cron.sh
-```
 
-# <a id="params">Параметры поиска</a>
+# <a id="params">Search Parameters</a>
 
-- `city` - Город поиска от 0 до 20;
-- `has_photo` - Наличие фото у объявления;
-- `furniture` - Наличие мебели в квартире;
-- `rooms` - Количество комнат от 1 до 5;
-- `price_from` - Стоимость, нижний предел;
-- `price_to` - Стоимость, верхний предел;
-- `owner` - Объявление опубликовано собственником;
+- `city` - Search city from 0 to 20;
+- `has_photo` - Listing has photos;
+- `furniture` - Apartment has furniture;
+- `rooms` - Number of rooms from 1 to 5;
+- `price_from` - Minimum price;
+- `price_to` - Maximum price;
+- `owner` - Listing posted by the owner;
 
-### Варианты значения `city`
+### City Values
 
-- 0 - Весь Казахстан.
-- 1 - Алматы.
-- 2 - Астана.
-- 3 - Шымкент.
-- 4 - Абайская обл.
-- 5 - Акмолинская обл.
-- 6 - Актюбинская обл.
-- 7 - Алматинская обл.
-- 8 - Атырауская обл.
-- 9 - Восточно-Казахстанская обл.
-- 10 - Жамбылская обл.
-- 11 - Жетысуская обл.
-- 12 - Западно-Казахстанская обл.
-- 13 - Карагандинская обл.
-- 14 - Костанайская обл.
-- 15 - Кызылординская обл.
-- 16 - Мангистауская обл.
-- 17 - Павлодарская обл.
-- 18 - Северо-Казахстанская обл.
-- 19 - Туркестанская обл.
-- 20 - Улытауская обл.
+- 0 - All of Kazakhstan.
+- 1 - Almaty.
+- 2 - Astana.
+- 3 - Shymkent.
+- 4 - Abai Region.
+- 5 - Akmola Region.
+- 6 - Aktobe Region.
+- 7 - Almaty Region.
+- 8 - Atyrau Region.
+- 9 - East Kazakhstan Region.
+- 10 - Zhambyl Region.
+- 11 - Zhetysu Region.
+- 12 - West Kazakhstan Region.
+- 13 - Karaganda Region.
+- 14 - Kostanay Region.
+- 15 - Kyzylorda Region.
+- 16 - Mangystau Region.
+- 17 - Pavlodar Region.
+- 18 - North Kazakhstan Region.
+- 19 - Turkestan Region.
+- 20 - Ulytau Region.
 
-### <a id="examples">Примеры указания параметров поиска:</a1>
+### <a id="examples">Examples of Search Parameter Specification:</a>
 
-1. Найти однокомнатные квартирами в Алматы.
-   Объявления с фотографиями.
-   Квартиры с мебелью.
-   Стоимость от 100000 до 300000.
-   Объявления от собственников.
+1. Find one-room apartments in Almaty.
+Listings with photos.
+Apartments with furniture.
+Price from 100000 to 300000.
+Listings from owners.
 
 ```json
 {
@@ -155,11 +155,11 @@ crontab -e
 }
 ```
 
-2. Найти двухкомнатные и трехкомнатные квартиры в Астане.
-   Объявления с фотографиями.
-   Квартиры без мебели.
-   Стоимость до 400000.
-   Объявления от собственников.
+2. Find two-room and three-room apartments in Astana.
+Listings with photos.
+Apartments without furniture.
+Price up to 400000.
+Listings from owners.
 
 ```json
 {
@@ -171,11 +171,11 @@ crontab -e
 }
 ```
 
-3. Найти квартиры с любым количеством комнат в Казахстане.
-   Объявления без фотографий.
-   Квартира без мебели.
-   Стоимость от 200000.
-   Объявления от собственников, агентств и частных риэлторов.
+3. Find apartments with any number of rooms in Kazakhstan.
+Listings without photos.
+Apartments without furniture.
+Price from 200000.
+Listings from owners, agencies, and private realtors.
 
 ```json
 {
@@ -183,7 +183,7 @@ crontab -e
 }
 ```
 
-Вернет такой же результат, как пример № 3.
+4. Returns the same result as example No. 3.
 
 ```json
 {
