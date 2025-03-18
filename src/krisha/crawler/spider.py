@@ -100,7 +100,7 @@ def get_ads_urls(home_url, ads_on_page: ResultSet) -> list[str]:
 def get_flats_data_on_page(
     ads_urls: list[str],
     config: Config,
-    flat_parser: FlatParser,
+    flat_parser: type[FlatParser],
 ) -> list[Flat]:
     missed_ad_counter = 0
     flats_data = []
@@ -135,12 +135,16 @@ def get_next_url(home_url, content: bs) -> str:
     return url
 
 
-def run_crawler(config: Config, connector: DBConnection, url: str) -> None:
+def run_crawler(
+    config: Config,
+    connector: DBConnection,
+    url: str,
+    flat_parser: type[FlatParser],
+) -> None:
     response = get_response(url, config)
     content = get_content(response)
     ads_count = get_ads_count(content)
     page_count = get_page_count(content, ads_count, config)
-    flat_parser = FlatParser
 
     with logging_redirect_tqdm():
         for num in trange(1, page_count + 1):

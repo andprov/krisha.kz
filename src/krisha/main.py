@@ -3,6 +3,7 @@ import sys
 
 from krisha.config.config import load_config
 from krisha.crawler.first_page import FirstPage
+from krisha.crawler.flat_parser import FlatParser
 from krisha.crawler.spider import run_crawler
 from krisha.db.service import get_connection
 
@@ -13,7 +14,7 @@ def main():
     config = load_config()
     connector = get_connection(config.path.db_file)
     first_page_url = FirstPage.get_url(config)
-    run_crawler(config, connector, first_page_url)
+    run_crawler(config, connector, first_page_url, FlatParser)
 
 
 if __name__ == "__main__":
