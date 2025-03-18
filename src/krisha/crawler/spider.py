@@ -84,7 +84,7 @@ def get_ads_on_page(content: bs) -> ResultSet:
     return ads
 
 
-def get_ads_urls(home_url, ads_on_page: ResultSet) -> list[str]:
+def get_ads_urls(home_url: str, ads_on_page: ResultSet) -> list[str]:
     ads_urls = []
     for ad in ads_on_page:
         title = ad.find("a", class_="a-card__title")
@@ -123,7 +123,7 @@ def get_flats_data_on_page(
     return flats_data
 
 
-def get_next_url(home_url, content: bs) -> str:
+def get_next_url(home_url: str, content: bs) -> str:
     next_btn = content.find("a", class_="paginator__btn--next")
     if not next_btn:
         raise ValueError(msg.CR_SOUP_FIND_ERROR.format("paginator__btn--next"))

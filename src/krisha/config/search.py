@@ -2,7 +2,6 @@ import json
 import logging
 from dataclasses import dataclass
 from json import JSONDecodeError
-from typing import Any
 
 import krisha.common.msg as msg
 from krisha.config.parser import ParserConfig
@@ -18,7 +17,7 @@ class SearchParameters:
         city: int = 0
         has_photo: bool = False
         furniture: bool = False
-        rooms: tuple = None
+        rooms: list[int] = None
         price_from: int = None
         price_to: int = None
         owner: bool = False
@@ -28,7 +27,7 @@ class SearchParameters:
     city: int = 0
     has_photo: bool = False
     furniture: bool = False
-    rooms: list | None = None
+    rooms: list[int] | None = None
     price_from: int | None = None
     price_to: int | None = None
     owner: bool = False
@@ -66,7 +65,7 @@ class SearchParameters:
         )
 
     @staticmethod
-    def _validate_city(city, parser_config: ParserConfig) -> int:
+    def _validate_city(city: int, parser_config: ParserConfig) -> int:
         min_city_idx = min(parser_config.cities_url_map)
         max_city_idx = max(parser_config.cities_url_map)
         if type(city) is int and min_city_idx <= city <= max_city_idx:
@@ -75,7 +74,7 @@ class SearchParameters:
         return min_city_idx
 
     @staticmethod
-    def _validate_bool_args(value: Any, name: str) -> bool:
+    def _validate_bool_args(value: bool, name: str) -> bool:
         if type(value) is bool:
             return value
         logger.warning(
@@ -85,7 +84,7 @@ class SearchParameters:
 
     @staticmethod
     def _validate_price(
-        value: Any,
+        value: int,
         name: str,
         parser_config: ParserConfig,
     ) -> int | None:
@@ -97,7 +96,10 @@ class SearchParameters:
         return
 
     @staticmethod
-    def _validate_rooms(rooms, parser_config: ParserConfig) -> list | None:
+    def _validate_rooms(
+        rooms: list[int] | None,
+        parser_config: ParserConfig,
+    ) -> list[int] | None:
         if rooms is None:
             return
         min_rooms = parser_config.min_rooms
@@ -117,9 +119,19 @@ def get_search_parameters(
 ) -> SearchParameters:
     try:
         with open(file_name) as file:
-            search_params = SearchParameters(parser_config, **json.load(file))
+            data = json.load(file)
+            search_params = SearchParameters(
+                parser_config=parser_config,
+                city=data.get("city"),
+                has_photo=data.get("has_photo"),
+                furniture=data.get("furniture"),
+                rooms=data.get("rooms"),
+                price_from=data.get("price_from"),
+                price_to=data.get("price_to"),
+                owner=data.get("owner"),
+            )
             logger.info(msg.LOAD_SEARCH_PARAMS_OK)
             return search_params
     except (OSError, TypeError, JSONDecodeError) as error:
         logger.warning(msg.LOAD_SEARCH_PARAMS_ERROR.format(error))
-    return SearchParameters(parser_config)
+    return SearchParameters(parser_config=parser_config)

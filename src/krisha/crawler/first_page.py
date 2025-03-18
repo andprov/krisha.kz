@@ -15,7 +15,10 @@ class FirstPage:
         return url if arg else None
 
     @staticmethod
-    def _get_rooms_url(rooms: list | None, parser: ParserConfig) -> str | None:
+    def _get_rooms_url(
+        rooms: list[int] | None,
+        parser: ParserConfig,
+    ) -> str | None:
         if rooms is None:
             return
         if len(rooms) == 1:

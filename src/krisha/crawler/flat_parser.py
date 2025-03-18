@@ -14,7 +14,7 @@ class FlatParser:
     """Pars content data and create Flat object."""
 
     @staticmethod
-    def _get_pars_data(content) -> dict:
+    def _get_pars_data(content: BeautifulSoup) -> dict:
         script = content.find("script", id="jsdata")
         if not script:
             raise ValueError(msg.CR_SOUP_FIND_ERROR.format("jsdata"))
