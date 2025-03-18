@@ -73,7 +73,7 @@ source .venv/bin/activate
 Запустить скрипт:
 
 ```shell
-python -m krisha.main
+python -m krisha
 ```
 
 # Настройка запуска по расписанию
@@ -84,7 +84,7 @@ python -m krisha.main
 #!/bin/bash
 cd /<PATH>/krisha.kz
 source .venv/bin/activate
-python -m krisha.main
+python -m krisha
 ```
 
 При необходимости, добавить права для выполнения `cron.sh`:

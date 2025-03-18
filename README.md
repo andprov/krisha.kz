@@ -68,7 +68,7 @@ Specify search parameters in the [SEARCH_PARAMETERS.json](SEARCH_PARAMETERS.json
 Run the script:
 
 ```shell
-python -m krisha.main
+python -m krisha
 ```
 
 # Setting Up Scheduled Runs
@@ -79,7 +79,7 @@ Edit the [cron.sh](cron.sh) file, adding your project path:
 #!/bin/bash
 cd /<PATH>/krisha.kz
 source .venv/bin/activate
-python -m krisha.main
+python -m krisha
 ```
 
 If necessary, add the rights to execute `cron.sh`:
