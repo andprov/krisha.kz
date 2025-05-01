@@ -35,20 +35,20 @@ def insert_flats_data_db(
 
     flats_value = [
         (
-            flat.id,
-            flat.uuid,
-            flat.url,
-            flat.room,
-            flat.square,
-            flat.city,
-            flat.lat,
-            flat.lon,
-            flat.description,
-            flat.photo,
+            flat[0].id,
+            flat[0].uuid,
+            flat[0].url,
+            flat[0].room,
+            flat[0].square,
+            flat[0].city,
+            flat[0].lat,
+            flat[0].lon,
+            flat[0].description,
+            flat[0].photo,
         )
         for flat in flats_data
     ]
-    price_value = [(flat.id, flat.price) for flat in flats_data]
+    price_value = [(flat[0].id, flat[0].price) for flat in flats_data]
 
     with connector as con:
         con.executemany(insert_flats_query, flats_value)
