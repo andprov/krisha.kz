@@ -52,7 +52,7 @@ def get_content(response: Response) -> bs:
 
 
 def get_ads_count(content: bs) -> int:
-    if not content.find("div", class_="a-search-options"):
+    if not (content.find("div", class_="a-search-options-unverified") or content.find("div", class_="a-search-options")):
         logger.warning(msg.CR_ADS_NOT_FOUND)
         sys.exit()
     logger.info(msg.CR_START)
