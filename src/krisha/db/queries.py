@@ -33,25 +33,32 @@ def insert_flats_data_db(
         VALUES (?, ?);
         """
 
-    flats_value = [
-        (
-            flat.id,
-            flat.uuid,
-            flat.url,
-            flat.room,
-            flat.square,
-            flat.city,
-            flat.lat,
-            flat.lon,
-            flat.description,
-            flat.photo,
+    flats_value = []
+    price_value = []
+    for flat in flats_data:
+        flats_value.append(
+            (
+                flat.id,
+                flat.uuid,
+                flat.url,
+                flat.room,
+                flat.square,
+                flat.city,
+                flat.lat,
+                flat.lon,
+                flat.description,
+                flat.photo,
+            )
         )
-        for flat in flats_data
-    ]
-    price_value = [(flat.id, flat.price) for flat in flats_data]
+        price_value.append(
+            (
+                flat.id,
+                flat.price,
+            )
+        )
 
     with connector as con:
         con.executemany(insert_flats_query, flats_value)
         con.executemany(insert_price_query, price_value)
         con.commit()
-    logger.info(msg.DB_INSERT_OK)
+        logger.info(msg.DB_INSERT_OK)
