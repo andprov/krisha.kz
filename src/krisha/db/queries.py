@@ -33,10 +33,10 @@ def insert_flats_data_db(
         VALUES (?, ?);
         """
 
-    flats_value = []
-    price_value = []
+    flats_rows = []
+    prices_rows = []
     for flat in flats_data:
-        flats_value.append(
+        flats_rows.append(
             (
                 flat.id,
                 flat.uuid,
@@ -50,7 +50,7 @@ def insert_flats_data_db(
                 flat.photo,
             )
         )
-        price_value.append(
+        prices_rows.append(
             (
                 flat.id,
                 flat.price,
@@ -58,7 +58,7 @@ def insert_flats_data_db(
         )
 
     with connector as con:
-        con.executemany(insert_flats_query, flats_value)
-        con.executemany(insert_price_query, price_value)
+        con.executemany(insert_flats_query, flats_rows)
+        con.executemany(insert_price_query, prices_rows)
         con.commit()
         logger.info(msg.DB_INSERT_OK)
